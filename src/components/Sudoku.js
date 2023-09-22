@@ -164,33 +164,55 @@ function Sudoku() {
           </LoadingContainer>
         )}
       </AnimatePresence>
-      <SudokuContainer>
-        <Table>
-          <Tbody>
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((row, rowIndex) => (
-              <Tr key={rowIndex}>
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((col, colIndex) => (
-                  <Td key={colIndex}>
-                    <Cell
-                      key={key}
-                      value={
-                        sudokuArr[row][col] === 0 ? '' : sudokuArr[row][col]
-                      }
-                      onChange={(e) => onInputChange(e, rowIndex, colIndex)}
-                      onKeyDown={(e) => deleteValue(e, rowIndex, colIndex)}
-                    />
-                  </Td>
-                ))}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-        <BtnContainer>
-          <Reset onClick={() => setSudokuArr(initial)}>reset</Reset>
-          <Solve onClick={solveSudoku}>Solve</Solve>
-          <Solve onClick={() => console.log(initial, sudokuArr)}>key</Solve>
-        </BtnContainer>
-      </SudokuContainer>
+      <AnimatePresence>
+        <SudokuContainer
+          as={motion.div}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+        >
+          <Table>
+            <Tbody>
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((row, rowIndex) => (
+                <Tr key={rowIndex}>
+                  {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((col, colIndex) => (
+                    <Td key={colIndex}>
+                      <Cell
+                        key={key}
+                        value={
+                          sudokuArr[row][col] === 0 ? '' : sudokuArr[row][col]
+                        }
+                        onChange={(e) => onInputChange(e, rowIndex, colIndex)}
+                        onKeyDown={(e) => deleteValue(e, rowIndex, colIndex)}
+                      />
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+          <BtnContainer>
+            <Reset
+              as={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              onClick={() => setSudokuArr(initial)}
+            >
+              reset
+            </Reset>
+            <Solve
+              as={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              onClick={solveSudoku}
+            >
+              Solve
+            </Solve>
+            <Solve onClick={() => console.log(initial, sudokuArr)}>key</Solve>
+          </BtnContainer>
+        </SudokuContainer>
+      </AnimatePresence>
     </Container>
   );
 }
@@ -203,8 +225,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: #26b567;
   align-items: center;
-  background-color: #5cdb95;
 `;
 const Title = styled.div`
   font-size: 1.5rem;
@@ -215,7 +237,6 @@ const SudokuContainer = styled.div``;
 const Table = styled.table`
   border: 4px solid black;
   border-collapse: collapse;
-  background-color: #edf5e1;
   background-color: #999;
 `;
 const Tbody = styled.tbody``;
