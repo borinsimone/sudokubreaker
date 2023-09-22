@@ -188,7 +188,7 @@ function Sudoku() {
         <BtnContainer>
           <Reset onClick={() => setSudokuArr(initial)}>reset</Reset>
           <Solve onClick={solveSudoku}>Solve</Solve>
-          <Solve onClick={() => console.log(sudokuArr)}>key</Solve>
+          <Solve onClick={() => console.log(initial, sudokuArr)}>key</Solve>
         </BtnContainer>
       </SudokuContainer>
     </Container>
@@ -211,12 +211,12 @@ const Title = styled.div`
   margin-bottom: 20px;
   font-weight: 600;
 `;
-const SudokuContainer = styled.div`
-height`;
+const SudokuContainer = styled.div``;
 const Table = styled.table`
   border: 4px solid black;
   border-collapse: collapse;
   background-color: #edf5e1;
+  background-color: #999;
 `;
 const Tbody = styled.tbody``;
 const Tr = styled.tr`
@@ -231,6 +231,7 @@ const Td = styled.td`
 `;
 
 const Cell = styled.input`
+  border-radius: 3px;
   height: 70px;
   width: 70px;
   font-size: 1.3rem;
@@ -246,9 +247,6 @@ const Cell = styled.input`
   @media (max-width: 450px) {
     height: 40px;
     width: 40px;
-  }
-  &:disabled {
-    background-color: #ffd24d;
   }
 `;
 const BtnContainer = styled.div`
