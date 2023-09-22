@@ -231,14 +231,18 @@ const Td = styled.td`
 `;
 
 const Cell = styled.input`
-  height: 50px;
-  width: 50px;
+  height: 70px;
+  width: 70px;
   font-size: 1.3rem;
   text-align: center;
   border: 1px solid #999;
   transition: all 300ms ease-in-out;
   outline: none;
   background-color: #edf5e1;
+  @media (max-width: 800px) {
+    height: 60px;
+    width: 60px;
+  }
   @media (max-width: 450px) {
     height: 40px;
     width: 40px;
