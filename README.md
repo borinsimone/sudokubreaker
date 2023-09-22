@@ -3,3 +3,5 @@ required npm package:
 
 - npm i styled-components
 - npm i framer-motion
+
+some more style incoming
