@@ -134,7 +134,7 @@ function Sudoku() {
             return updatedGrid;
           });
 
-          await sleep(100);
+          await sleep(50);
           if (row === 8 && col === 8) {
             setLoading(false);
           }
