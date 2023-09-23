@@ -261,6 +261,7 @@ function Sudoku() {
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((col, colIndex) => (
                     <Td key={colIndex}>
                       <Cell
+                        type='number'
                         key={key}
                         ref={cellRefs.current[row][col]}
                         value={
@@ -306,23 +307,6 @@ function Sudoku() {
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 onClick={checkBoard}
-              >
-                Solve
-              </Solve>
-              <Solve
-                as={motion.button}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                onClick={() => {
-                  // console.log(cellRefs);
-                  // for (let row = 0; row < 9; row++) {
-                  //   for (let col = 0; col < 9; col++) {
-                  //     console.log(cellRefs.current[row][col].current);
-                  //   }
-                  // }
-                  console.log(cellRefs.current[0][7].current.style);
-                }}
               >
                 Solve
               </Solve>
@@ -383,6 +367,11 @@ const Cell = styled.input`
   transition: all 300ms ease-in-out;
   outline: none;
   background-color: #edf5e1;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   @media (max-width: 800px) {
     height: 60px;
     width: 60px;
