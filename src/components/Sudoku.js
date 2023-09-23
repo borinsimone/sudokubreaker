@@ -1,9 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import spinner from '../assets/Spinner.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 function Sudoku() {
-  let initial = [
+  // let initial = [
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // ];
+  const [initial, setInitial] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -13,7 +24,7 @@ function Sudoku() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ];
+  ]);
   //   let test = [
   //     [6, 1, 3, 8, 0, 0, 0, 9, 0],
   //     [0, 0, 7, 6, 4, 0, 8, 0, 0],
@@ -27,16 +38,36 @@ function Sudoku() {
   //   ];
 
   const [sudokuArr, setSudokuArr] = useState(initial);
+
+  //Create refs for each cell
+
+  const cellRefs = useRef([]);
+
+  // Create the refs using the useRef hook
+  cellRefs.current = Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => React.createRef())
+  );
+
   //ADD NUMBER TO THE BOARD
   function onInputChange(e, row, col) {
     let val = Number(e.target.value);
-
+    //Check input validity
     if (val >= 1 && val <= 9) {
-      setSudokuArr((prevState) => {
-        const updatedGrid = [...prevState];
-        updatedGrid[row][col] = val;
-        return updatedGrid;
-      });
+      if (isValidMove(sudokuArr, row, col, val)) {
+        //Add value to array
+        setSudokuArr((prevState) => {
+          const updatedGrid = [...prevState];
+          updatedGrid[row][col] = val;
+          return updatedGrid;
+        });
+      } else {
+        console.log(e.currentTarget.style);
+        let target = e.currentTarget;
+        target.style.outline = '2px solid red';
+        setTimeout(() => {
+          target.style.outline = 'none';
+        }, 700);
+      }
     }
   }
   //DELETE USER INPUT
@@ -70,6 +101,22 @@ function Sudoku() {
 
     return true; // No conflicts found
   }
+
+  //Set cell bg
+  function setCellBackground(row, col) {
+    const cellRef = cellRefs.current[row][col];
+    if (cellRef) {
+      cellRef.current.style.backgroundColor = '#e7eaa4';
+    }
+  }
+  function checkBoard() {
+    if (sudokuArr === initial) {
+      setError(true);
+    } else {
+      solveSudoku();
+    }
+  }
+
   async function solveSudoku() {
     //Set loading state
     setLoading(true);
@@ -80,6 +127,7 @@ function Sudoku() {
       console.log(sudokuBuffer);
       for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
+          setCellBackground(row, col);
           setSudokuArr((prevState) => {
             const updatedGrid = [...prevState];
             updatedGrid[row][col] = sudokuBuffer[row][col];
@@ -214,6 +262,7 @@ function Sudoku() {
                     <Td key={colIndex}>
                       <Cell
                         key={key}
+                        ref={cellRefs.current[row][col]}
                         value={
                           sudokuArr[row][col] === 0 ? '' : sudokuArr[row][col]
                         }
@@ -238,7 +287,16 @@ function Sudoku() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                onClick={() => setSudokuArr(initial)}
+                onClick={() => {
+                  setSudokuArr(initial);
+
+                  for (let row = 0; row < 9; row++) {
+                    for (let col = 0; col < 9; col++) {
+                      cellRefs.current[row][col].current.style.backgroundColor =
+                        '#edf5e1';
+                    }
+                  }
+                }}
               >
                 reset
               </Reset>
@@ -247,7 +305,24 @@ function Sudoku() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                onClick={solveSudoku}
+                onClick={checkBoard}
+              >
+                Solve
+              </Solve>
+              <Solve
+                as={motion.button}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                onClick={() => {
+                  // console.log(cellRefs);
+                  // for (let row = 0; row < 9; row++) {
+                  //   for (let col = 0; col < 9; col++) {
+                  //     console.log(cellRefs.current[row][col].current);
+                  //   }
+                  // }
+                  console.log(cellRefs.current[0][7].current.style);
+                }}
               >
                 Solve
               </Solve>
