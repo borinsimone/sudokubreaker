@@ -71,35 +71,30 @@ function Sudoku() {
     return true; // No conflicts found
   }
   async function solveSudoku() {
+    //Set loading state
+    setLoading(true);
+    // Get deepCopy
     let sudokuBuffer = JSON.parse(JSON.stringify(sudokuArr));
-    if (sudokuArr === initial) {
-      setError(true);
-    } else {
-      //Set loading state
-      setLoading(true);
-      // Get deepCopy
 
-      if (sudokuHelper(sudokuBuffer)) {
-        console.log(sudokuBuffer);
-        for (let row = 0; row < 9; row++) {
-          for (let col = 0; col < 9; col++) {
-            //   if (sudokuArr[row][col] !== 0) {
-            setSudokuArr((prevState) => {
-              const updatedGrid = [...prevState];
-              updatedGrid[row][col] = sudokuBuffer[row][col];
-              return updatedGrid;
-            });
-            //   }
-            await sleep(100);
-            if (row === 8 && col === 8) {
-              setLoading(false);
-            }
+    if (sudokuHelper(sudokuBuffer)) {
+      console.log(sudokuBuffer);
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          setSudokuArr((prevState) => {
+            const updatedGrid = [...prevState];
+            updatedGrid[row][col] = sudokuBuffer[row][col];
+            return updatedGrid;
+          });
+
+          await sleep(100);
+          if (row === 8 && col === 8) {
+            setLoading(false);
           }
         }
-      } else {
-        setLoading(false);
-        alert('no solution exist');
       }
+    } else {
+      setLoading(false);
+      alert('no solution exist');
     }
   }
   function sudokuHelper(board) {
@@ -136,9 +131,43 @@ function Sudoku() {
       setError(false);
     }, 3000);
   }, [error]);
+  let title = [
+    's',
+    'u',
+    'd',
+    'o',
+    'k',
+    'u',
+    'B',
+    'r',
+    'e',
+    'a',
+    'k',
+    'e',
+    'r',
+    '()',
+  ];
   return (
     <Container>
-      <Title>sudokuBreaker()</Title>
+      <AnimatePresence>
+        <Title
+          as={motion.div}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 1,
+          }}
+        >
+          {title.map((letter) => (
+            <Letter
+              as={motion.div}
+              whileHover={{ scale: 1.4, y: '-10px' }}
+            >
+              {letter}
+            </Letter>
+          ))}
+        </Title>
+      </AnimatePresence>
       <AnimatePresence>
         {error && (
           <ErrorContainer
@@ -167,8 +196,15 @@ function Sudoku() {
       <AnimatePresence>
         <SudokuContainer
           as={motion.div}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{
+            duration: 5,
+            type: 'spring',
+            stiffness: 400,
+            damping: 30,
+            delay: 0.8,
+          }}
         >
           <Table>
             <Tbody>
@@ -190,27 +226,33 @@ function Sudoku() {
               ))}
             </Tbody>
           </Table>
-          <BtnContainer>
-            <Reset
-              as={motion.button}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-              onClick={() => setSudokuArr(initial)}
+          <AnimatePresence>
+            <BtnContainer
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.4, duration: 0.7 }}
             >
-              reset
-            </Reset>
-            <Solve
-              as={motion.button}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-              onClick={solveSudoku}
-            >
-              Solve
-            </Solve>
-            <Solve onClick={() => console.log(initial, sudokuArr)}>key</Solve>
-          </BtnContainer>
+              <Reset
+                as={motion.button}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                onClick={() => setSudokuArr(initial)}
+              >
+                reset
+              </Reset>
+              <Solve
+                as={motion.button}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                onClick={solveSudoku}
+              >
+                Solve
+              </Solve>
+            </BtnContainer>
+          </AnimatePresence>
         </SudokuContainer>
       </AnimatePresence>
     </Container>
@@ -229,8 +271,13 @@ const Container = styled.div`
   align-items: center;
 `;
 const Title = styled.div`
-  font-size: 1.5rem;
   margin-bottom: 20px;
+  display: flex;
+  cursor: default;
+`;
+const Letter = styled.div`
+  font-size: 1.5rem;
+  letter-spacing: 2px;
   font-weight: 600;
 `;
 const SudokuContainer = styled.div``;
