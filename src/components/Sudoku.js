@@ -1,20 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import spinner from '../assets/Spinner.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 function Sudoku() {
-  // let initial = [
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  // ];
-  const [initial, setInitial] = useState([
+  let initial = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -24,7 +12,18 @@ function Sudoku() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  ];
+  // const [initial, setInitial] = useState([
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // ]);
   //   let test = [
   //     [6, 1, 3, 8, 0, 0, 0, 9, 0],
   //     [0, 0, 7, 6, 4, 0, 8, 0, 0],
@@ -105,12 +104,12 @@ function Sudoku() {
   //Set cell bg
   function setCellBackground(row, col) {
     const cellRef = cellRefs.current[row][col];
-    if (cellRef) {
+    if (cellRef && cellRef.current) {
       cellRef.current.style.backgroundColor = '#e7eaa4';
     }
   }
   function checkBoard() {
-    if (sudokuArr === initial) {
+    if (JSON.stringify(sudokuArr) === JSON.stringify(initial)) {
       setError(true);
     } else {
       solveSudoku();
@@ -137,6 +136,10 @@ function Sudoku() {
           await sleep(50);
           if (row === 8 && col === 8) {
             setLoading(false);
+            setCompleted(true);
+            setTimeout(() => {
+              setCompleted(false);
+            }, 1000);
           }
         }
       }
@@ -167,9 +170,20 @@ function Sudoku() {
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+  //Reset board
+  function resetBoard() {
+    setSudokuArr(initial);
 
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (cellRefs && cellRefs.current[row][col].current) {
+          cellRefs.current[row][col].current.style.backgroundColor = '#edf5e1';
+        }
+      }
+    }
+  }
   //STATE TO RE-RENDER COMPONENTS ONCE SOLVE() HAS DONE
-  const [key, setKey] = useState(0);
+  // const [key, setKey] = useState(0);
   //ERROR STATE
   const [error, setError] = useState(false);
   // Loading state
@@ -195,6 +209,7 @@ function Sudoku() {
     'r',
     '()',
   ];
+  const [completed, setCompleted] = useState(false);
   return (
     <Container>
       <AnimatePresence>
@@ -227,7 +242,7 @@ function Sudoku() {
             The board is not valid
           </ErrorContainer>
         )}
-        {loading && (
+        {/* {loading && (
           <LoadingContainer
             as={motion.div}
             initial={{ opacity: 0 }}
@@ -239,7 +254,7 @@ function Sudoku() {
               alt='loading...'
             />
           </LoadingContainer>
-        )}
+        )} */}
       </AnimatePresence>
       <AnimatePresence>
         <SudokuContainer
@@ -254,15 +269,21 @@ function Sudoku() {
             delay: 0.8,
           }}
         >
-          <Table>
+          <Table completed={completed}>
             <Tbody>
               {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((row, rowIndex) => (
-                <Tr key={rowIndex}>
+                <Tr
+                  completed={completed}
+                  key={rowIndex}
+                >
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((col, colIndex) => (
-                    <Td key={colIndex}>
+                    <Td
+                      completed={completed}
+                      key={colIndex}
+                    >
                       <Cell
-                        type='number'
-                        key={key}
+                        // type='number'
+                        // key={key}
                         ref={cellRefs.current[row][col]}
                         value={
                           sudokuArr[row][col] === 0 ? '' : sudokuArr[row][col]
@@ -288,16 +309,7 @@ function Sudoku() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                onClick={() => {
-                  setSudokuArr(initial);
-
-                  for (let row = 0; row < 9; row++) {
-                    for (let col = 0; col < 9; col++) {
-                      cellRefs.current[row][col].current.style.backgroundColor =
-                        '#edf5e1';
-                    }
-                  }
-                }}
+                onClick={resetBoard}
               >
                 reset
               </Reset>
@@ -310,6 +322,9 @@ function Sudoku() {
               >
                 Solve
               </Solve>
+              {/* <Reset onClick={() => console.log(initial === sudokuArr)}>
+                test
+              </Reset> */}
             </BtnContainer>
           </AnimatePresence>
         </SudokuContainer>
@@ -341,19 +356,25 @@ const Letter = styled.div`
 `;
 const SudokuContainer = styled.div``;
 const Table = styled.table`
-  border: 4px solid black;
+  border: ${(props) =>
+    props.completed ? '4px solid white' : '4px solid black'};
+  transition: border 100ms ease-in-out;
   border-collapse: collapse;
   background-color: #999;
 `;
 const Tbody = styled.tbody``;
 const Tr = styled.tr`
   &:nth-child(3n) {
-    border-bottom: 2px solid black;
+    border-bottom: ${(props) =>
+      props.completed ? '4px solid white' : '4px solid black'};
+    transition: border 100ms ease-in-out;
   }
 `;
 const Td = styled.td`
   &:nth-child(3n) {
-    border-right: 2px solid black;
+    border-right: ${(props) =>
+      props.completed ? '4px solid white' : '4px solid black'};
+    transition: border 100ms ease-in-out;
   }
 `;
 
@@ -396,7 +417,6 @@ const Button = styled.button`
   background-color: #05386b;
   color: #fff;
 `;
-const Check = styled(Button)``;
 const Solve = styled(Button)``;
 const Reset = styled(Button)``;
 const LoadingContainer = styled.div`
