@@ -1,11 +1,10 @@
 {
   "files": {
-    "main.js": "/sudokubreaker/static/js/main.da9545b7.js",
-    "static/media/Spinner.svg": "/sudokubreaker/static/media/Spinner.707d348a22615d9f6106e62927fa2b49.svg",
+    "main.js": "/sudokubreaker/static/js/main.b62c0c57.js",
     "index.html": "/sudokubreaker/index.html",
-    "main.da9545b7.js.map": "/sudokubreaker/static/js/main.da9545b7.js.map"
+    "main.b62c0c57.js.map": "/sudokubreaker/static/js/main.b62c0c57.js.map"
   },
   "entrypoints": [
-    "static/js/main.da9545b7.js"
+    "static/js/main.b62c0c57.js"
   ]
 }
