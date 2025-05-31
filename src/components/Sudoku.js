@@ -535,7 +535,8 @@ export default Sudoku;
 
 const Container = styled.div`
   /* Container principale con gradiente dinamico */
-  height: 100%;
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -623,8 +624,7 @@ const SudokuContainer = styled.div`
   padding: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   max-width: 90vw;
-  max-height: 80vh;
-
+  margin: auto;
   @media (max-width: 768px) {
     padding: 15px;
     border-radius: 15px;

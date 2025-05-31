@@ -324,8 +324,9 @@ const Container = styled.div`
 
 const SplashScreen = styled.div`
   /* Schermata di caricamento potenziata */
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -722,7 +723,8 @@ const Credits = styled.div`
 const MainApp = styled.div`
   /* Container dell'app principale */
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;

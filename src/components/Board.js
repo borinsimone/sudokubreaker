@@ -265,7 +265,8 @@ function Board() {
 
 export default Board;
 const Container = styled.div`
-  height: 100%;
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -277,8 +278,7 @@ const Container = styled.div`
   grid-template-columns: repeat(9, 1fr);
   */
 `;
-const SudokuContainer = styled.div`
-height`;
+const SudokuContainer = styled.div``;
 const Table = styled.table`
   border: 4px solid black;
   border-collapse: collapse;
