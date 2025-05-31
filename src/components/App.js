@@ -333,8 +333,9 @@ const SplashScreen = styled.div`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   color: white;
   text-align: center;
-  position: relative;
+  position: absolute;
   padding: 20px;
+  z-index: 10;
 
   &::before {
     content: '';
