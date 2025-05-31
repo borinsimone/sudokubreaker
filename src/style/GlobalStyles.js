@@ -131,11 +131,26 @@ body {
     * {
         font-size: 20px;
     }
+    
+    /* Migliore gestione del touch su mobile */
+    button, input {
+        min-height: 44px; /* Apple guidelines per touch targets */
+    }
 }
 
 @media (max-width: 480px) {
     * {
         font-size: 18px;
+    }
+    
+    button, input {
+        min-height: 40px;
+    }
+}
+
+@media (max-width: 320px) {
+    * {
+        font-size: 16px;
     }
 }
 
@@ -143,6 +158,29 @@ body {
 @media (hover: none) and (pointer: coarse) {
     *:focus {
         outline: none;
+    }
+    
+    /* Migliore esperienza touch */
+    button:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Prevenzione dello zoom su double tap per iOS */
+@media (max-width: 768px) {
+    input[type="text"], input[type="number"] {
+        font-size: 16px !important; /* Previene zoom su iOS */
+        transform-origin: left top;
+    }
+}
+
+/* Ottimizzazione per dispositivi con notch */
+@supports (padding: max(0px)) {
+    .safe-area {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
     }
 }
 `;

@@ -61,32 +61,60 @@ function App() {
             as={motion.div}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.8, rotateY: 90 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
           >
             {/* Elementi di sfondo fluttuanti */}
             <FloatingElements>
-              {[...Array(12)].map((_, i) => (
+              {[...Array(8)].map((_, i) => (
                 <FloatingNumber
                   key={i}
                   as={motion.div}
                   initial={{
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
+                    x:
+                      Math.random() *
+                      (typeof window !== 'undefined'
+                        ? window.innerWidth
+                        : 1000),
+                    y:
+                      Math.random() *
+                      (typeof window !== 'undefined'
+                        ? window.innerHeight
+                        : 800),
                     opacity: 0,
                   }}
                   animate={{
                     y: [
-                      Math.random() * window.innerHeight,
-                      Math.random() * window.innerHeight - 100,
-                      Math.random() * window.innerHeight,
+                      Math.random() *
+                        (typeof window !== 'undefined'
+                          ? window.innerHeight
+                          : 800),
+                      Math.random() *
+                        (typeof window !== 'undefined'
+                          ? window.innerHeight
+                          : 800) -
+                        100,
+                      Math.random() *
+                        (typeof window !== 'undefined'
+                          ? window.innerHeight
+                          : 800),
                     ],
                     x: [
-                      Math.random() * window.innerWidth,
-                      Math.random() * window.innerWidth - 50,
-                      Math.random() * window.innerWidth,
+                      Math.random() *
+                        (typeof window !== 'undefined'
+                          ? window.innerWidth
+                          : 1000),
+                      Math.random() *
+                        (typeof window !== 'undefined'
+                          ? window.innerWidth
+                          : 1000) -
+                        50,
+                      Math.random() *
+                        (typeof window !== 'undefined'
+                          ? window.innerWidth
+                          : 1000),
                     ],
-                    opacity: [0, 0.3, 0],
+                    opacity: [0, 0.2, 0],
                     rotate: 360,
                   }}
                   transition={{
@@ -96,7 +124,7 @@ function App() {
                     ease: 'easeInOut',
                   }}
                   style={{
-                    fontSize: `${1.5 + Math.random() * 2}rem`,
+                    fontSize: `${1 + Math.random() * 1.5}rem`,
                     color: `hsl(${Math.random() * 360}, 70%, 70%)`,
                   }}
                 >
@@ -121,7 +149,7 @@ function App() {
                 as={motion.div}
                 animate={{
                   rotateY: [0, 360],
-                  scale: [1, 1.1, 1],
+                  scale: [1, 1.05, 1],
                 }}
                 transition={{
                   rotateY: { duration: 4, repeat: Infinity, ease: 'linear' },
@@ -131,17 +159,16 @@ function App() {
                 🧩
               </LogoContainer>
 
-              {/* Anelli rotanti attorno al logo */}
+              {/* Anelli rotanti attorno al logo - ALLINEATI */}
               <LogoRing
                 as={motion.div}
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
               />
-              <LogoRing
+              <LogoRingSecond
                 as={motion.div}
                 animate={{ rotate: -360 }}
                 transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-                delay={1}
               />
             </SplashLogo>
 
@@ -267,14 +294,9 @@ function App() {
           <MainApp
             key='main'
             as={motion.div}
-            initial={{ opacity: 0, scale: 0.8, rotateX: 90 }}
-            animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-            transition={{
-              duration: 1.2,
-              ease: 'easeOut',
-              type: 'spring',
-              stiffness: 100,
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             <Sudoku />
           </MainApp>
@@ -290,9 +312,9 @@ export default App;
 
 const Container = styled.div`
   /* Container principale dell'applicazione */
-  height: 100%;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -312,6 +334,7 @@ const SplashScreen = styled.div`
   color: white;
   text-align: center;
   position: relative;
+  padding: 20px;
 
   &::before {
     content: '';
@@ -334,12 +357,6 @@ const SplashScreen = styled.div`
         circle at 40% 40%,
         rgba(120, 119, 198, 0.3) 0%,
         transparent 50%
-      ),
-      linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 70%
       );
     animation: backgroundMove 8s ease-in-out infinite;
   }
@@ -350,10 +367,10 @@ const SplashScreen = styled.div`
       transform: translateY(0px) rotate(0deg);
     }
     33% {
-      transform: translateY(-20px) rotate(1deg);
+      transform: translateY(-10px) rotate(0.5deg);
     }
     66% {
-      transform: translateY(10px) rotate(-1deg);
+      transform: translateY(5px) rotate(-0.5deg);
     }
   }
 `;
@@ -367,6 +384,10 @@ const FloatingElements = styled.div`
   height: 100%;
   pointer-events: none;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    display: none; /* Nasconde su mobile per prestazioni */
+  }
 `;
 
 const FloatingNumber = styled.div`
@@ -378,10 +399,17 @@ const FloatingNumber = styled.div`
 `;
 
 const SplashLogo = styled.div`
-  /* Container logo con effetti */
+  /* Container logo con effetti - CENTRATO CORRETTAMENTE */
   position: relative;
   margin-bottom: 30px;
   z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const LogoContainer = styled.div`
@@ -390,38 +418,64 @@ const LogoContainer = styled.div`
   filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
   position: relative;
   z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media (max-width: 768px) {
-    font-size: 6rem;
+    font-size: 5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 4rem;
   }
 `;
 
 const LogoRing = styled.div`
-  /* Anelli rotanti attorno al logo */
+  /* Primo anello rotante - CENTRATO */
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-top-color: rgba(255, 215, 0, 0.8);
   border-radius: 50%;
 
-  &:nth-child(3) {
-    width: 250px;
-    height: 250px;
+  @media (max-width: 768px) {
+    width: 120px;
+    height: 120px;
     border-width: 2px;
   }
+
+  @media (max-width: 480px) {
+    width: 100px;
+    height: 100px;
+  }
+`;
+
+const LogoRingSecond = styled.div`
+  /* Secondo anello rotante - CENTRATO */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  height: 220px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom-color: rgba(255, 215, 0, 0.6);
+  border-radius: 50%;
 
   @media (max-width: 768px) {
     width: 150px;
     height: 150px;
+    border-width: 2px;
+  }
 
-    &:nth-child(3) {
-      width: 180px;
-      height: 180px;
-    }
+  @media (max-width: 480px) {
+    width: 130px;
+    height: 130px;
   }
 `;
 
@@ -438,6 +492,7 @@ const SplashTitle = styled.h1`
   animation: rainbowShift 4s ease infinite;
   z-index: 2;
   text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  line-height: 1.2;
 
   @keyframes rainbowShift {
     0%,
@@ -457,6 +512,11 @@ const SplashTitle = styled.h1`
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2rem;
   }
 `;
 
@@ -471,21 +531,36 @@ const SplashSubtitle = styled.p`
 
   @media (max-width: 768px) {
     font-size: 1.1rem;
+    margin-bottom: 20px;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
   }
 `;
 
 const FeaturesList = styled.div`
   /* Lista delle caratteristiche */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
   margin-bottom: 40px;
   z-index: 2;
   max-width: 800px;
+  padding: 0 20px;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+    margin-bottom: 25px;
+    max-width: 500px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -493,16 +568,22 @@ const FeatureItem = styled.div`
   /* Singola caratteristica */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  padding: 15px 20px;
-  border-radius: 15px;
+  padding: 12px 16px;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    padding: 12px 16px;
-    font-size: 0.9rem;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 10px;
+    font-size: 0.75rem;
   }
 `;
 
@@ -512,6 +593,16 @@ const ProgressContainer = styled.div`
   max-width: 400px;
   margin-bottom: 30px;
   z-index: 2;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 250px;
+  }
 `;
 
 const ProgressLabel = styled.div`
@@ -520,6 +611,14 @@ const ProgressLabel = styled.div`
   margin-bottom: 10px;
   font-weight: 600;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const ProgressBarContainer = styled.div`
@@ -531,6 +630,10 @@ const ProgressBarContainer = styled.div`
   overflow: hidden;
   position: relative;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 480px) {
+    height: 6px;
+  }
 `;
 
 const ProgressBar = styled.div`
@@ -583,8 +686,14 @@ const SkipButton = styled.button`
   @media (max-width: 768px) {
     top: 20px;
     right: 20px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 20px;
   }
 `;
 
@@ -601,6 +710,11 @@ const Credits = styled.div`
   @media (max-width: 768px) {
     bottom: 20px;
     font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    bottom: 15px;
+    font-size: 0.7rem;
   }
 `;
 

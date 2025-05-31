@@ -543,6 +543,14 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   overflow: hidden;
+  padding: 10px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 5px;
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
 `;
 
 const ParticlesContainer = styled.div`
@@ -568,11 +576,21 @@ const Particle = styled.div`
 
 const Title = styled.div`
   /* Titolo principale con effetti */
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   display: flex;
   cursor: default;
   z-index: 2;
   position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 10px;
+  }
 `;
 
 const Letter = styled.div`
@@ -583,6 +601,16 @@ const Letter = styled.div`
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
 `;
 
 const SudokuContainer = styled.div`
@@ -594,6 +622,20 @@ const SudokuContainer = styled.div`
   border-radius: 20px;
   padding: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 90vw;
+  max-height: 80vh;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    border-radius: 15px;
+    max-width: 95vw;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 98vw;
+  }
 `;
 
 const Table = styled.table`
@@ -609,6 +651,16 @@ const Table = styled.table`
     props.completed
       ? '0 0 30px rgba(255, 215, 0, 0.8), inset 0 0 30px rgba(255, 215, 0, 0.3)'
       : '0 10px 30px rgba(0, 0, 0, 0.2)'};
+
+  @media (max-width: 768px) {
+    border-width: ${(props) => (props.completed ? '4px' : '3px')};
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    border-width: ${(props) => (props.completed ? '3px' : '2px')};
+    border-radius: 10px;
+  }
 `;
 
 const Tbody = styled.tbody``;
@@ -620,6 +672,18 @@ const Tr = styled.tr`
       props.completed ? '4px solid #FFD700' : '4px solid #333'};
     transition: border 300ms ease-in-out;
   }
+
+  @media (max-width: 768px) {
+    &:nth-child(3n) {
+      border-bottom-width: ${(props) => (props.completed ? '3px' : '3px')};
+    }
+  }
+
+  @media (max-width: 480px) {
+    &:nth-child(3n) {
+      border-bottom-width: ${(props) => (props.completed ? '2px' : '2px')};
+    }
+  }
 `;
 
 const Td = styled.td`
@@ -628,6 +692,18 @@ const Td = styled.td`
     border-right: ${(props) =>
       props.completed ? '4px solid #FFD700' : '4px solid #333'};
     transition: border 300ms ease-in-out;
+  }
+
+  @media (max-width: 768px) {
+    &:nth-child(3n) {
+      border-right-width: ${(props) => (props.completed ? '3px' : '3px')};
+    }
+  }
+
+  @media (max-width: 480px) {
+    &:nth-child(3n) {
+      border-right-width: ${(props) => (props.completed ? '2px' : '2px')};
+    }
   }
 `;
 
@@ -669,17 +745,25 @@ const Cell = styled.input`
     margin: 0;
   }
 
-  /* Responsive design */
-  @media (max-width: 800px) {
-    height: 60px;
-    width: 60px;
-    font-size: 1.3rem;
+  /* Responsive design migliorato */
+  @media (max-width: 768px) {
+    height: 50px;
+    width: 50px;
+    font-size: 1.2rem;
+    border-radius: 6px;
   }
 
-  @media (max-width: 450px) {
-    height: 45px;
-    width: 45px;
-    font-size: 1.1rem;
+  @media (max-width: 480px) {
+    height: 35px;
+    width: 35px;
+    font-size: 1rem;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 320px) {
+    height: 30px;
+    width: 30px;
+    font-size: 0.9rem;
   }
 `;
 
@@ -689,6 +773,19 @@ const BtnContainer = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 25px;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 15px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Button = styled.button`
@@ -703,6 +800,7 @@ const Button = styled.button`
   transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  min-width: 120px;
 
   &::before {
     content: '';
@@ -726,6 +824,19 @@ const Button = styled.button`
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px 24px;
+    font-size: 1rem;
+    min-width: 100px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    width: 200px;
+    max-width: 90%;
   }
 `;
 
@@ -768,12 +879,33 @@ const LoadingContainer = styled.div`
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   backdrop-filter: blur(10px);
+  max-width: 90vw;
+
+  @media (max-width: 768px) {
+    padding: 30px;
+    border-radius: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px;
+    border-radius: 12px;
+  }
 `;
 
 const LoadingSpinner = styled.div`
   /* Spinner di caricamento */
   font-size: 4rem;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
 `;
 
 const LoadingText = styled.div`
@@ -781,6 +913,15 @@ const LoadingText = styled.div`
   font-size: 1.2rem;
   color: #333;
   font-weight: 600;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const ErrorContainer = styled.div`
@@ -798,18 +939,44 @@ const ErrorContainer = styled.div`
   box-shadow: 0 10px 30px rgba(238, 90, 82, 0.4);
   z-index: 1000;
   backdrop-filter: blur(10px);
+  max-width: 90vw;
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+    border-radius: 12px;
+    top: 15%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px 16px;
+    border-radius: 10px;
+    top: 10%;
+  }
 `;
 
 const ErrorIcon = styled.div`
   /* Icona di errore */
   font-size: 1.5rem;
   margin-right: 15px;
+
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+    margin-right: 10px;
+  }
 `;
 
 const ErrorText = styled.div`
   /* Testo di errore */
   font-weight: 600;
   font-size: 1.1rem;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const CompletionOverlay = styled.div`
@@ -824,6 +991,7 @@ const CompletionOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  padding: 20px;
 `;
 
 const CompletionMessage = styled.div`
@@ -837,6 +1005,19 @@ const CompletionMessage = styled.div`
   text-align: center;
   box-shadow: 0 20px 60px rgba(255, 215, 0, 0.6);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  max-width: 90vw;
+
+  @media (max-width: 768px) {
+    padding: 30px 40px;
+    font-size: 1.5rem;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 30px;
+    font-size: 1.2rem;
+    border-radius: 15px;
+  }
 `;
 
 /* Animazione di shake per errori */
